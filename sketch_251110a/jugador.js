@@ -1,43 +1,55 @@
 class jugador {
   constructor() {
     this.PosY=455;
-    this.PosX=350;
+    this.PosX=340;
     this.vida=1;
     this.velocidad = 20;
+    this.ancho = 30;
+    this.alto = 30;
   }
   dibujar() {
-    ellipse(this.PosX, this.PosY, 40, 50);
+    fill(0); 
+    ellipse(this.PosX, this.PosY, this.ancho, this.alto);
   }
 
-  moverjugador(keyCode) {
+// ... (el constructor y dibujar() están bien)
+
+// ... (el constructor y dibujar() están bien)
+
+  moverjugador(keyCode, juego) {
+  
+    let nextX = this.PosX;
+    let nextY = this.PosY;
+
     if (keyCode == LEFT_ARROW) {
-      this.moverizquierda();
+      nextX -= this.velocidad;
     }
     if (keyCode == RIGHT_ARROW) {
-      this.moverderecha();
+      nextX += this.velocidad;
     }
     if (keyCode == UP_ARROW) {
-      this.moverarriba();
+      nextY -= this.velocidad;
     }
     if (keyCode == DOWN_ARROW) {
-      this.moverabajo();
+      nextY += this.velocidad;
     }
-}
-moverizquierda(){
-  this.PosX -= this.velocidad;
+
+
+    let radioX = this.ancho / 2;
+    let radioY = this.alto / 2;
+
+    if (
+      juego.esPosicionValida(nextX - radioX, nextY - radioY) && 
+      juego.esPosicionValida(nextX + radioX, nextY - radioY) && 
+      juego.esPosicionValida(nextX - radioX, nextY + radioY) && 
+      juego.esPosicionValida(nextX + radioX, nextY + radioY)    
+    ) {
+   
+      this.PosX = nextX;
+      this.PosY = nextY;
+    }
+  }
 }
 
-moverderecha(){
-  this.PosX += this.velocidad;
-}
-
-moverarriba(){
-  this.PosY -= this.velocidad;
-}
-
-moverabajo(){
-  this.PosY +=this.velocidad;
-}
-}
  
  

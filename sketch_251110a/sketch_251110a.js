@@ -1,52 +1,22 @@
-let mijuego;
-let estadodeljuego = "inicio";
-let botonX, botonY, botonAncho, botonAlto;
-function setup() {
-  mijuego = new juego();
-   mijuego.iniciar();
-  createCanvas(640, 480);
- botonAncho = 200;
-  botonAlto = 50;
-  botonX = width / 2 - botonAncho / 2;
-  botonY = height / 2 + 20;
-}
+let mijuego; // Esta es la ÚNICA variable global, la instancia de tu juego.
 
-  function mousePressed() {
-  if (estadodeljuego === "inicio") {
-    if (mouseX > botonX && 
-        mouseX < botonX + botonAncho && 
-        mouseY > botonY && 
-        mouseY < botonY + botonAlto) {
-      estadodeljuego = "jugando";
-    }
-  }
+function setup() {
+  createCanvas(640, 480);
+  mijuego = new juego(); // Creamos la instancia del juego.
+  mijuego.iniciar(); // Llamamos a su setup interno.
 }
 
 function draw() {
-  background(250)
-;
-if (estadodeljuego === "inicio") {
-    stroke(0);
-    fill(230); 
-    rect(botonX, botonY, botonAncho, botonAlto);
-    fill(0);
-    textSize(20);
-    textAlign(CENTER, CENTER); 
-    text("Iniciar Juego", botonX + botonAncho / 2, botonY + botonAlto / 2);
-  }
-else if (estadodeljuego === "jugando") { 
-    mijuego.dibujar();
-}
+  // En lugar de tener el IF aquí, llamamos a un método de la clase.
+  mijuego.actualizarYDibujar();
 }
 
-
-
-
-
-
-
-function keyPressed(){
-if (estadodeljuego === "jugando") {
-    mijuego.moverjugador(keyCode);
+function keyPressed() {
+  // Delegamos el evento de tecla a la clase.
+  mijuego.manejarTecla(keyCode);
 }
+
+function mousePressed() {
+  // Delegamos el evento de clic a la clase.
+  mijuego.manejarClic(mouseX, mouseY);
 }
