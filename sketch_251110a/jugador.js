@@ -1,23 +1,21 @@
 class jugador {
   constructor() {
-    this.PosY=455;
-    this.PosX=340;
-    this.vida=1;
+    this.PosY = 460;
+    this.PosX = 340;
+    this.vida = 1;
     this.velocidad = 20;
-    this.ancho = 30;
-    this.alto = 30;
+    this.ancho = 38;
+    this.alto = 38;
+ 
   }
+  
   dibujar() {
     fill(0); 
     ellipse(this.PosX, this.PosY, this.ancho, this.alto);
   }
 
-// ... (el constructor y dibujar() están bien)
-
-// ... (el constructor y dibujar() están bien)
-
   moverjugador(keyCode, juego) {
-  
+    
     let nextX = this.PosX;
     let nextY = this.PosY;
 
@@ -34,7 +32,6 @@ class jugador {
       nextY += this.velocidad;
     }
 
-
     let radioX = this.ancho / 2;
     let radioY = this.alto / 2;
 
@@ -44,12 +41,25 @@ class jugador {
       juego.esPosicionValida(nextX - radioX, nextY + radioY) && 
       juego.esPosicionValida(nextX + radioX, nextY + radioY)    
     ) {
-   
       this.PosX = nextX;
       this.PosY = nextY;
+      return true; // Devuelve 'true' porque se movió
     }
+    return false; // Devuelve 'false' porque chocó
+  }
+
+  moverizquierda(){
+    this.PosX -= this.velocidad;
+  }
+  moverderecha(){
+    this.PosX += this.velocidad;
+  }
+  moverarriba(){
+    this.PosY -= this.velocidad;
+  }
+  moverabajo(){
+    this.PosY += this.velocidad;
   }
 }
-
  
  

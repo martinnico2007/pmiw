@@ -1,9 +1,13 @@
-let mijuego; // Esta es la ÚNICA variable global, la instancia de tu juego.
+let mijuego;
+let imagenJugador;
 
+function preload() {
+  imagenEsposa = loadImage('libraries/esposa.png');
+}
 function setup() {
   createCanvas(640, 480);
-  mijuego = new juego(); // Creamos la instancia del juego.
-  mijuego.iniciar(); // Llamamos a su setup interno.
+  mijuego = new juego(); 
+  mijuego.iniciar(); 
 }
 
 function draw() {

@@ -1,145 +1,150 @@
 class juego {
   constructor(){
     this.jugador = new jugador();
+    this.ui = new UI();
     this.barbaazul;
     this.paredes = [];
+    this.llaves = [];
     this.tamañoCelda = 40;
     this.laberinto = [];
-    this.llaves = [];
     this.estadodeljuego = "inicio";
+
     this.botonX = 0;
     this.botonY = 0;
     this.botonAncho = 0;
     this.botonAlto = 0;
+
+    this.botonReinicioX = 0;
+    this.botonReinicioY = 0;
+    this.botonReinicioAncho = 0;
+    this.botonReinicioAlto = 0;
+
     this.llavesRecogidas = 0;
     this.totalLlaves = 0;
+    this.tiempoLimite = 45000;
+    this.tiempoInicio = 0;
   }
- 
+
   iniciar(){
-    // Definimos el laberinto
-    let laberinto = [
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
-      [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-      [1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 2, 1, 1, 0, 1],
-      [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
-      [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
-      [1, 0, 1, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 1],
-      [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
-      [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-      [1, 2, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1]
-    ];
-    this.laberinto = laberinto; // Guardamos el laberinto en la clase
+    this.laberinto = Mapa.obtenerMapa();
 
-
-this.totalLlaves = 0;
+    this.totalLlaves = 0;
+    this.llaves = [];
+    this.paredes = [];
     for (let fila = 0; fila < this.laberinto.length; fila++) {
       for (let col = 0; col < this.laberinto[fila].length; col++) {
-        
         let x = col * this.tamañoCelda;
         let y = fila * this.tamañoCelda;
-
-        // Si es '1', crea una pared
-        if (this.laberinto[fila][col] === 1) { // <-- CORRECCIÓN: Se añade {
+        if (this.laberinto[fila][col] === 1) {
           this.paredes.push(new paredes(x, y, this.tamañoCelda));
-        } // <-- Esta llave ahora cierra el IF
-        
-        // Si es '2', crea una llave
+        }
         else if (this.laberinto[fila][col] === 2) {
           this.llaves.push(new llaves(x, y, this.tamañoCelda));
+          this.totalLlaves++;
         }
-        // (Las llaves '}' que cierran los 'for' loops están más abajo)
       }
     }
-// ...
-
-    // --- Lógica del botón (de setup()) MOVİDA AQUÍ ---
     this.botonAncho = 200;
     this.botonAlto = 50;
     this.botonX = width / 2 - this.botonAncho / 2;
     this.botonY = height / 2 + 20;
+    this.botonReinicioAncho = 200;
+    this.botonReinicioAlto = 50;
+    this.botonReinicioX = width / 2 - this.botonReinicioAncho / 2;
+    this.botonReinicioY = height / 2 + 80;
   }
-  
-  // --- NUEVA FUNCIÓN (Reemplaza el draw() de sketch.js) ---
-  // Esta es la MÁQUINA DE ESTADOS que pidió tu profesor
+
   actualizarYDibujar() {
-    background(250);
+    // Si estamos jugando comprobamos tiempo
+    if (this.estadodeljuego === "jugando") {
+      let tiempoTranscurrido = millis() - this.tiempoInicio;
+      if (tiempoTranscurrido > this.tiempoLimite) {
+        this.estadodeljuego = "derrota";
+      }
+    }
 
-    if (this.estadodeljuego === "inicio") {
-      this.dibujarMenuInicio();
-    }
-    else if (this.estadodeljuego === "jugando") { 
-      this.dibujarJuego();
-    }
-  else if (this.estadodeljuego === "victoria") {
-      this.dibujarPantallaVictoria();
+    // Delegamos TODO el dibujo a la UI (inicio, jugando, victoria, derrota)
+    this.ui.dibujar(this.estadodeljuego, this);
   }
-}
 
-  // --- NUEVA FUNCIÓN (Reemplaza el mousePressed() de sketch.js) ---
   manejarClic(mouseX, mouseY) {
     if (this.estadodeljuego === "inicio") {
-      if (mouseX > this.botonX && 
-          mouseX < this.botonX + this.botonAncho && 
-          mouseY > this.botonY && 
+      if (mouseX > this.botonX &&
+          mouseX < this.botonX + this.botonAncho &&
+          mouseY > this.botonY &&
           mouseY < this.botonY + this.botonAlto) {
         this.estadodeljuego = "jugando";
+        this.tiempoInicio = millis();
+      }
+    }
+    else if (this.estadodeljuego === "victoria") {
+      if (mouseX > this.botonReinicioX &&
+          mouseX < this.botonReinicioX + this.botonReinicioAncho &&
+          mouseY > this.botonReinicioY &&
+          mouseY < this.botonReinicioY + this.botonReinicioAlto) {
+        this.reiniciar();
+      }
+    }
+    else if (this.estadodeljuego === "derrota") {
+      if (mouseX > this.botonReinicioX &&
+          mouseX < this.botonReinicioX + this.botonReinicioAncho &&
+          mouseY > this.botonReinicioY &&
+          mouseY < this.botonReinicioY + this.botonReinicioAlto) {
+        this.reiniciar();
       }
     }
   }
 
-  // --- NUEVA FUNCIÓN (Reemplaza el keyPressed() de sketch.js) ---
   manejarTecla(keyCode) {
     if (this.estadodeljuego === "jugando") {
-      this.jugador.moverjugador(keyCode, this); // Pasa 'this' (juego) para colisiones
-    
-    let seMovio = this.jugador.moverjugador(keyCode, this);
+      let seMovio = this.jugador.moverjugador(keyCode, this);
       if (seMovio) {
         this.chequearColisionLlaves();
         this.chequearVictoria();
       }
+    }
+  }
+
+  chequearColisionLlaves() {
+    let pFila = Math.floor(this.jugador.PosY / this.tamañoCelda);
+    let pCol = Math.floor(this.jugador.PosX / this.tamañoCelda);
+    for (let i = this.llaves.length - 1; i >= 0; i--) {
+      let llave = this.llaves[i];
+      let lFila = Math.floor(llave.PosY / this.tamañoCelda);
+      let lCol = Math.floor(llave.PosX / this.tamañoCelda);
+      if (pFila === lFila && pCol === lCol) {
+        this.llaves.splice(i, 1);
+        this.llavesRecogidas++;
+        console.log("Llaves recogidas: " + this.llavesRecogidas);
       }
     }
-  
-  dibujarMenuInicio() {
-    stroke(0);
-    fill(230); 
-    rect(this.botonX, this.botonY, this.botonAncho, this.botonAlto);
-    fill(0);
-    textSize(20);
-    textAlign(CENTER, CENTER); 
-    text("Iniciar Juego", this.botonX + this.botonAncho / 2, this.botonY + this.botonAlto / 2);
   }
 
-  // (Renombramos tu función 'dibujar' a 'dibujarJuego' para más claridad)
-  dibujarJuego(){
-    for (let i = 0; i < this.paredes.length; i++) {
-      this.paredes[i].dibujar();
+  chequearVictoria() {
+    let pFila = Math.floor(this.jugador.PosY / this.tamañoCelda);
+    let pCol = Math.floor(this.jugador.PosX / this.tamañoCelda);
+    if (pFila === 1 && pCol === 0 && this.llavesRecogidas === this.totalLlaves) {
+      this.estadodeljuego = "victoria";
     }
-    for (let i = 0; i < this.llaves.length; i++) {
-      this.llaves[i].dibujar();
-    }
-    this.jugador.dibujar();
   }
 
-  // (La función de colisión se queda igual, ya era POO)
   esPosicionValida(pixelX, pixelY) {
     let col = Math.floor(pixelX / this.tamañoCelda);
     let fila = Math.floor(pixelY / this.tamañoCelda);
-
     if (fila < 0 || fila >= this.laberinto.length || col < 0 || col >= this.laberinto[0].length) {
       return false;
     }
     if (this.laberinto[fila][col] === 1) {
       return false;
     }
-    return true; 
+    return true;
   }
 
-  // (Tu método 'reiniciar' se queda igual)
   reiniciar(){
-
+    this.estadodeljuego = "inicio";
+    this.jugador = new jugador();
+    this.llavesRecogidas = 0;
+    this.tiempoInicio = 0;
+    this.iniciar();
   }
 }
