@@ -1,5 +1,5 @@
-//https://youtu.be/CZVmnDwQAF8
-//Rodrigo Ezequiel Rodriguez - Comisión 4
+//https://youtu.be/5VzVFTyWWpM
+//Martín Nicolás Robles Serrano- comisión 4
 
 let imagen = [];
 let fondo;
@@ -148,3 +148,4 @@ function mousePressed(){
     }
   }
 }
+
