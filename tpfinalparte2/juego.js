@@ -2,7 +2,6 @@ class juego {
   constructor(){
     this.jugador = new jugador();
     this.ui = new UI();
-    this.barbaazul;
     this.paredes = [];
     this.llaves = [];
     this.tamañoCelda = 40;
@@ -148,4 +147,5 @@ class juego {
     this.iniciar();
   }
 }
+
 
