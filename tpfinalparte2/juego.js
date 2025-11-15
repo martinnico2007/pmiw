@@ -55,15 +55,12 @@ class juego {
   }
 
   actualizarYDibujar() {
-    // Si estamos jugando comprobamos tiempo
     if (this.estadodeljuego === "jugando") {
       let tiempoTranscurrido = millis() - this.tiempoInicio;
       if (tiempoTranscurrido > this.tiempoLimite) {
         this.estadodeljuego = "derrota";
       }
     }
-
-    // Delegamos TODO el dibujo a la UI (inicio, jugando, victoria, derrota)
     this.ui.dibujar(this.estadodeljuego, this);
   }
 
@@ -151,3 +148,4 @@ class juego {
     this.iniciar();
   }
 }
+
