@@ -1,7 +1,5 @@
 class Mapa {
-  // Un método estático (static) se puede llamar sin crear un objeto
   static obtenerMapa() {
-    // Tu mapa actualizado
     return [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1],
@@ -18,3 +16,4 @@ class Mapa {
     ];
   }
 }
+
