@@ -14,7 +14,6 @@ cargarFuentes(botones) {
 
 
   dibujar(estado, juego) {
-    // delegado a los métodos según el estado
     if (estado === "inicio") {
       background(250);
       this.dibujarMenuInicio(juego.botonX, juego.botonY, juego.botonAncho, juego.botonAlto);
@@ -66,7 +65,7 @@ cargarFuentes(botones) {
     // Dibuja jugador
     juego.jugador.dibujar();
 
-    // HUD: tiempo restante
+    //tiempo restante
     let tiempoTranscurrido = millis() - juego.tiempoInicio;
     let tiempoRestante = (juego.tiempoLimite - tiempoTranscurrido) / 1000;
     if (tiempoRestante < 0) tiempoRestante = 0;
@@ -75,7 +74,7 @@ cargarFuentes(botones) {
     textAlign(LEFT, TOP);
     text("Tiempo: " + nf(tiempoRestante, 0, 1), 10, 10);
 
-    // HUD: llaves
+    // contador de llaves
     textAlign(RIGHT, TOP);
     text("Llaves: " + juego.llavesRecogidas + " / " + juego.totalLlaves, width - 10, 10);
   }
@@ -124,3 +123,4 @@ cargarFuentes(botones) {
     text("¡PERDISTE!", width / 2, height / 2);
   }
 }
+
