@@ -6,10 +6,10 @@ class llaves {
   }
 
   dibujar() {
-    // La imagen se dibuja más pequeña que la celda
-    let itemSize = this.tamaño * 0.6;  // 60% del tamaño de la casilla
+    let itemSize = this.tamaño * 0.6; 
     let offset = (this.tamaño - itemSize) / 2;
 
     image(imgllave, this.PosX + offset, this.PosY + offset, itemSize, itemSize);
   }
 }
+
