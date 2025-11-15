@@ -1,3 +1,5 @@
+// https://youtu.be/s27d5ZD24k4
+// Martin Nicolas Robles Serrano- comisión 4
 let mijuego;
 let imagenJugador;
 let imgInicio;
@@ -42,4 +44,5 @@ function keyPressed() {
 function mousePressed() {
   mijuego.manejarClic(mouseX, mouseY);
 }
+
 
